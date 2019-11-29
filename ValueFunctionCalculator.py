@@ -10,12 +10,13 @@ StartAge = 65
 
 class ValueFunctionCalculator:
 
-    def __init__(self, money_lower_bound, money_upper_bound, portfolios):
+    def __init__(self, money_lower_bound, money_upper_bound, portfolios, client):
         self.money_lower_bound = money_lower_bound
         self.money_upper_bound = money_upper_bound
         self.portfolios = portfolios
         self.value_function = ValueFunction.ValueFunction()
         self.financial_components = FinancialComponents.FinancialComponents()
+        self.client = client
         return
 
     def populate_value_function(self):
@@ -35,10 +36,10 @@ class ValueFunctionCalculator:
         value = self.value_function.get_value_function(age, money, portfolio)
 
         if value == 0:
-            val_prev_portfolio, val_same_portfolio, val_next_portfolio = self.simulate_value_function(age, money, portfolio,
-                                                                                                      0)
-            self.value_function.set_value_function(age, money, portfolio,
-                                    np.max([val_prev_portfolio, val_same_portfolio, val_next_portfolio]))
+            val_prev_portfolio, val_same_portfolio, val_next_portfolio = self.simulate_value_function(
+                age, money, portfolio, self.client.get_contribution(age))
+            self.value_function.set_value_function(
+                age, money, portfolio, np.max([val_prev_portfolio, val_same_portfolio, val_next_portfolio]))
             value = self.value_function.get_value_function(age, money, portfolio)
         #  self.set_policy(age, money, portfolio, portfolio + np.argmax([val_prev_portfolio, val_same_portfolio, val_next_portfolio]) - 1)
 

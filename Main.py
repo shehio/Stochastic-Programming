@@ -1,5 +1,6 @@
 import PortfolioFactory as pf
 import ValueFunctionCalculator as vfc
+import Client as cl
 
 # StartAge = 50
 # RetirementAge = 67
@@ -8,13 +9,11 @@ import ValueFunctionCalculator as vfc
 # MoneyUpperBound = 2500
 
 # Test parameters
-StartAge = 65
 RetirementAge = 67
 Portfolios = 3
 MoneyLowerBound = 100
 MoneyUpperBound = 103
 SimulationNumber = 1000
-
 
 
 class Solution:
@@ -25,22 +24,13 @@ class Solution:
     contributions = {}
     policy = {}
 
-    def __init__(self):
+    def __init__(self, start_age):
+        self.client = cl.Client(start_age, RetirementAge)
         self.portfolios = pf.PortfolioFactory().get_available_portfolios()
-        self.value_function_calculator = vfc.ValueFunctionCalculator(MoneyLowerBound, MoneyUpperBound, self.portfolios)
-        value_function = self.populate_contributions()
+        self.value_function_calculator = vfc.ValueFunctionCalculator(MoneyLowerBound, MoneyUpperBound, self.portfolios, self.client)
         self.value_function_calculator.populate_value_function()
         # Solution.populate_policy()
         return
-
-    @staticmethod
-    def populate_contributions():
-        for age in range(StartAge, RetirementAge):
-            Solution.contributions[age] = round(0.15 * (103.63 - 0.03 * (55 - age)), 2)
-
-    # @staticmethod
-    # def round_values(number1, number2, number3, rounding):
-    #     return round(number1, rounding), round(number2, rounding), round(number3, rounding)
 
     @staticmethod
     def set_policy(age, money, portfolio, value):
@@ -63,5 +53,4 @@ class Solution:
     #                 Solution.policy[age][money][portfolio] = 0
     #     return
 
-c1 = Solution()
-print(Solution.contributions)
+c1 = Solution(65)
