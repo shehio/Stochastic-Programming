@@ -9,6 +9,3 @@ class PortfolioFactory:
                       Portfolio.Portfolio([0.7, 0.3], [0.10, 0.20], [0.20, 0.40], [[1, 0.3], [0.3, 1]], 0.2),
                       Portfolio.Portfolio([0, 1], [0.10, 0.20], [0.20, 0.40], [[1, 0.3], [0.3, 1]], 0.2)]
         return portfolios
-
-# portfolio_factory = PortfolioFactory()
-# print(portfolio_factory.get_available_portfolios())
