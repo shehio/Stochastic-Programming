@@ -1,4 +1,6 @@
 import numpy as np
+import PortfolioFactory
+import FinancialComponents
 
 # StartAge = 50
 # RetirementAge = 67
@@ -15,28 +17,32 @@ MoneyLowerBound = 100
 MoneyUpperBound = 103
 SimulationNumber = 1000
 
-class Portfolio:
-    def __init__(self):
-        return
-
 class Solution:
 
+    # Move Client data to their own class
+    # Move policy/value functions somewhere else.
+    portfolios = []
+    financial_components = None
     valueFunction = {}
-    fees = {}
     contributions = {}
-    portfoliosReturns = {}
-    portfoliosVariances = {}
     policy = {}
 
+
     def __init__(self):
-        Solution.PopulatePortfoliosReturnsAndVariance()
+        factory = PortfolioFactory.PortfolioFactory()
+        Solution.portfolios = factory.get_available_portfolios()
         Solution.populateContributions()
-        Solution.populateFees()
+        Solution.financial_components = FinancialComponents.FinancialComponents()
         Solution.createValueFunction()
         Solution.PopulateValueFunction()
         Solution.populatePolicy()
-
         return
+
+    @staticmethod
+    def populateContributions():
+        for age in range(StartAge, RetirementAge):
+            Solution.contributions[age] = round(0.15 * (103.63 - 0.03 * (55 - age)), 2)
+
 
     @staticmethod
     def createValueFunction():
@@ -57,17 +63,13 @@ class Solution:
         # Set the base condition
         targetMoney = 101
         for actualMoney in range(MoneyLowerBound, MoneyUpperBound):
-            Solution.valueFunction[RetirementAge][actualMoney] = Solution.computeUtilityFunction(actualMoney, targetMoney)
+            Solution.valueFunction[RetirementAge][actualMoney] = Solution.financial_components.get_shortfall_utility(actualMoney, targetMoney)
 
         for age in range(StartAge, RetirementAge): # each stage
             for money in range(MoneyLowerBound, MoneyUpperBound):
                 for portfolio in range(1, Portfolios + 1):
                     Solution.getOrComputeValueFunctionAndSetPolicy(age, money, portfolio)
         return
-
-    @staticmethod
-    def SampleReturn(mean, variance):
-        return mean
 
     @staticmethod
     def roundValues(number1, number2, number3, rounding):
@@ -82,8 +84,9 @@ class Solution:
 
         for i in range(SimulationNumber):
             print(portfolio)
-            portfolio_return = Solution.SampleReturn(Solution.portfoliosReturns[portfolio], Solution.portfoliosVariances[portfolio])
-            total_money = round(money * (1 + portfolio_return - Solution.fees[portfolio]) + Solution.contributions[age], 1)
+            print(Solution.portfolios)
+            portfolio_return = Solution.portfolios[portfolio - 1].sample_return()
+            total_money = round(money * (1 + portfolio_return) + Solution.contributions[age], 1)
 
             val_same_portfolio += Solution.getOrComputeValueFunctionAndSetPolicy(age + 1, total_money, portfolio) / SimulationNumber
 
@@ -103,7 +106,7 @@ class Solution:
         if not money in Solution.valueFunction[age].keys():
             Solution.valueFunction[age][money] = {}
         if age == RetirementAge:
-            Solution.valueFunction[age][money][portfolio] = Solution.computeUtilityFunction(money, targetMoney)
+            Solution.valueFunction[age][money][portfolio] = Solution.financial_components.get_shortfall_utility(money, targetMoney)
         else:
             Solution.valueFunction[age][money][portfolio] = 0
         print("age: " + str(age) + ", money: " + str(money) + ", portfolio: " + str(portfolio))
@@ -144,57 +147,7 @@ class Solution:
                     Solution.policy[age][money][portfolio] = 0
         return
 
-    @staticmethod
-    def PopulatePortfoliosReturnsAndVariance():
-        ## Dummy numbers to get on with the rest of the problem for now.
-        mu = 0.06  # np.random.lognormal(0, 1)
-        sigma = 0.12  # np.random.lognormal(0, 1)
-        for portfolio in range(1, Portfolios + 1):
-            Solution.portfoliosReturns[portfolio] = mu
-            Solution.portfoliosVariances[portfolio] = sigma
-        return
-
-    @staticmethod
-    def populateContributions():
-        for age in range(StartAge, RetirementAge):
-            Solution.contributions[age] = round(0.15 * (103.63 - 0.03 * (55 - age)), 2)
-
-    @staticmethod
-    def populateFees():
-        for portfolio in range(1, 9):
-            Solution.fees[portfolio] = round(0.2 - (portfolio - 1) * 0.02, 2)
-
-    @staticmethod
-    def computeUtilityFunction(actualMoney, targetMoney):
-        exponent = 0.7
-        gamma = 1 / 5  # in case of thousands, it should be 1 / 5000
-        utility = 0
-        if actualMoney > targetMoney:
-            utility = (actualMoney ** exponent) / exponent
-        else:
-            utility = ((actualMoney ** exponent) / exponent) - gamma * (targetMoney - actualMoney)
-        return round(utility, 2)
-
-
-    # def ValueFunction(age, actualMoney, portfolio):
-    #     # Backward recursion in place
-    #     if age >= RetirementAge:
-            # return ValueFunctionTable[actualMoney] # We don't care about age or portfolio.
-
-
-
 c1 = Solution()
 
 print(Solution.valueFunction)
-print(Solution.portfoliosReturns)
-print(Solution.portfoliosVariances)
 print(Solution.contributions)
-print(Solution.fees)
-# table = {1: {}}
-# table[1][1] = {}
-# table[1][1][1] = 4
-# print(table[1])
-# print(table[1][1])
-# print(table[1][1][1])
-# for age in range(50, 67):
-#     print(round(SalaryInThousandsForCurrentAge(age), 2))
