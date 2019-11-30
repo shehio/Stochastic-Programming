@@ -58,8 +58,8 @@ class PortfolioFactory:
     @staticmethod
     def create_portfolio(weights, fees):
         return Portfolio.Portfolio(
-                weights = weights,
-                means = PortfolioFactory.means,
-                standard_deviations = PortfolioFactory.standard_deviations,
-                correlations = PortfolioFactory.cor,
-                fees = fees)
+                weights=weights,
+                means=PortfolioFactory.means,
+                standard_deviations=PortfolioFactory.standard_deviations,
+                correlations=PortfolioFactory.cor,
+                fees=fees)

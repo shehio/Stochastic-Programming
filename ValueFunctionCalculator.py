@@ -2,6 +2,7 @@ import numpy as np
 import math
 import ValueFunction
 import FinancialComponents
+import Policy
 
 SimulationNumber = 1000
 RetirementAge = 67
@@ -16,6 +17,7 @@ class ValueFunctionCalculator:
         self.value_function = ValueFunction.ValueFunction()
         self.financial_components = FinancialComponents.FinancialComponents()
         self.client = client
+        self.policy = Policy.Policy()
         return
 
     def populate_value_function(self):
@@ -26,7 +28,14 @@ class ValueFunctionCalculator:
             for money in range(self.money_lower_bound, self.money_upper_bound):
                 for portfolio in range(1, len(self.portfolios) + 1):
                     self.get_or_compute_value_function(age, money, portfolio)
-        self.value_function.print_value_function()
+        # self.value_function.print_value_function()
+        self.policy.print_policy(
+            portfolio_start=1,
+            age_start=self.client.start_age,
+            money_start=self.money_lower_bound,
+            portfolios=len(self.portfolios),
+            ages=RetirementAge - self.client.start_age,
+            monies=self.money_upper_bound - self.money_lower_bound)
         return
 
     def get_or_compute_value_function(self, age, money, portfolio):
@@ -37,7 +46,7 @@ class ValueFunctionCalculator:
             self.value_function.set_value_function(
                 age, money, np.max([val_prev_portfolio, val_same_portfolio, val_next_portfolio]), portfolio)
             value = self.value_function.get_value_function(age, money, portfolio)
-        #  self.set_policy(age, money, portfolio, portfolio + np.argmax([val_prev_portfolio, val_same_portfolio, val_next_portfolio]) - 1)
+            self.policy.set_policy(age, money, portfolio, portfolio + np.argmax([val_prev_portfolio, val_same_portfolio, val_next_portfolio]) - 1)
 
         return value
 
@@ -49,7 +58,6 @@ class ValueFunctionCalculator:
         for i in range(SimulationNumber):
             portfolio_return = self.portfolios[portfolio - 1].sample_return()
             total_money = np.floor(money * (1 + portfolio_return) + contribution)
-            # print(f"The total money is: {total_money}")
 
             val_same_portfolio += self.get_or_compute_value_function(age + 1, total_money, portfolio) / SimulationNumber
             # print(f"The value of the same portfolio is: {val_same_portfolio} in simulation number: {i}")

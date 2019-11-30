@@ -18,7 +18,7 @@ class ValueFunction:
 
     # Sorry for the optional argument but python doesn't allow overloads obviously.
     def get_value_function(self, age, money, portfolio):
-        money = math.floor(money)
+        money = ValueFunction.money_modification(money)
         if age == RetirementAge:
             if age not in self.value_function.keys() or money not in self.value_function[age].keys():
                 self.set_value_function(age, money, self.financial_components.get_shortfall_utility(money, TargetMoney), None)
@@ -38,6 +38,14 @@ class ValueFunction:
                 self.value_function[age][money] = {}
             self.value_function[age][money][portfolio] = value
         return
+
+    @staticmethod
+    def money_modification(money):
+        return math.floor(money)
+
+    @staticmethod
+    def roundup(x):
+        return int(math.ceil(x / 10.0)) * 10
 
     def print_value_function(self):
         for age in self.value_function.keys():
