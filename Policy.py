@@ -1,4 +1,5 @@
 import numpy as np
+import math
 import sys
 
 
@@ -8,7 +9,12 @@ class Policy:
         self.policy = {}
         return
 
+    @staticmethod
+    def money_modification(money):
+        return math.floor(money)
+
     def set_policy(self, age, money, portfolio, value):
+        money = Policy.money_modification(money)
         if age not in self.policy.keys():
             self.policy[age] = {}
         if money not in self.policy[age].keys():
@@ -35,6 +41,7 @@ class Policy:
         for age in self.policy.keys():
             for money in self.policy[age].keys():
                 for portfolio in self.policy[age][money].keys():
+                    print(f"Age: {age}, money: {money}, portfolio: {portfolio}")
                     decision_matrix[age - age_start][money - money_start][portfolio - portfolio_start]\
                         = self.policy[age][money][portfolio]
 

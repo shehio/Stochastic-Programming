@@ -11,21 +11,21 @@ RetirementAge = 67
 class ValueFunctionCalculator:
 
     def __init__(self, money_lower_bound, money_upper_bound, portfolios, client):
+        # You could probably add a couple of asserts to make sure the input is valid.
         self.money_lower_bound = money_lower_bound
         self.money_upper_bound = money_upper_bound
         self.portfolios = portfolios
-        self.value_function = ValueFunction.ValueFunction()
+        self.value_function = ValueFunction.ValueFunction(self.money_lower_bound, self.money_upper_bound,)
         self.financial_components = FinancialComponents.FinancialComponents()
         self.client = client
         self.policy = Policy.Policy()
         return
 
-    def populate_value_function(self):
-        # Set the base condition
-
+    def populate_value_function(self):  # The name is incorrect. It does more it claims.
+        step = 1
         for age in range(self.client.start_age, RetirementAge):  # each stage
             print(f"Working on age: {age}")
-            for money in range(self.money_lower_bound, self.money_upper_bound):
+            for money in range(self.money_lower_bound, self.money_upper_bound, step):
                 for portfolio in range(1, len(self.portfolios) + 1):
                     self.get_or_compute_value_function(age, money, portfolio)
         self.value_function.print_value_function()

@@ -27,8 +27,9 @@ class Solution:
         self.value_function_calculator.populate_value_function()
         return
 
+
 start = time.time()
-Solution(start_age=66, initial_balance=1000)
+Solution(start_age=65, initial_balance=1000)
 end = time.time()
-print(end - start)
+print(f"Execution time in minutes: {(end - start) / 60}")
 
