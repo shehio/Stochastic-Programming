@@ -1,13 +1,11 @@
 import numpy as np
+import math
 import FinancialComponents
 import PortfolioFactory
 
-MoneyLowerBound = 100
-MoneyUpperBound = 103
-SimulationNumber = 1000
 RetirementAge = 67
-StartAge = 65
-Portfolios = 3
+TargetMoney = 2079 # remove from here
+
 
 class ValueFunction:
 
@@ -20,10 +18,10 @@ class ValueFunction:
 
     # Sorry for the optional argument but python doesn't allow overloads obviously.
     def get_value_function(self, age, money, portfolio):
-        target_money = 101 # remove from here
+        money = math.floor(money)
         if age == RetirementAge:
             if age not in self.value_function.keys() or money not in self.value_function[age].keys():
-                self.set_value_function(age, money, self.financial_components.get_shortfall_utility(money, target_money), None)
+                self.set_value_function(age, money, self.financial_components.get_shortfall_utility(money, TargetMoney), None)
             return self.value_function[age][money]
         elif age not in self.value_function.keys() or money not in self.value_function[age].keys() or portfolio not in self.value_function[age][money]:
             self.set_value_function(age, money, 0, portfolio)
@@ -42,4 +40,8 @@ class ValueFunction:
         return
 
     def print_value_function(self):
-        print(self.value_function)
+        for age in self.value_function.keys():
+            print(f"For age {age}:===========================================================")
+            for money in self.value_function[age].keys():
+                print(f"For money {money}:")
+                print(f"utility becomes: {self.value_function[age][money]}")

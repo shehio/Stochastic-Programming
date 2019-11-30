@@ -11,8 +11,8 @@ import Client as cl
 # Test parameters
 RetirementAge = 67
 Portfolios = 3
-MoneyLowerBound = 100
-MoneyUpperBound = 103
+MoneyLowerBound = 2000
+MoneyUpperBound = 2100
 SimulationNumber = 1000
 
 
@@ -24,10 +24,11 @@ class Solution:
     contributions = {}
     policy = {}
 
-    def __init__(self, start_age):
-        self.client = cl.Client(start_age, RetirementAge)
+    def __init__(self, start_age, initial_balance):
+        self.client = cl.Client(start_age, RetirementAge, initial_balance)
         self.portfolios = pf.PortfolioFactory().get_available_portfolios()
-        self.value_function_calculator = vfc.ValueFunctionCalculator(MoneyLowerBound, MoneyUpperBound, self.portfolios, self.client)
+        self.value_function_calculator = vfc.ValueFunctionCalculator(
+            MoneyLowerBound, MoneyUpperBound, self.portfolios, self.client)
         self.value_function_calculator.populate_value_function()
         # Solution.populate_policy()
         return
@@ -53,4 +54,5 @@ class Solution:
     #                 Solution.policy[age][money][portfolio] = 0
     #     return
 
-c1 = Solution(65)
+
+c1 = Solution(start_age=66, initial_balance=1000)
