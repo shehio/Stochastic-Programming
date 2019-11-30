@@ -28,7 +28,7 @@ class ValueFunctionCalculator:
             for money in range(self.money_lower_bound, self.money_upper_bound):
                 for portfolio in range(1, len(self.portfolios) + 1):
                     self.get_or_compute_value_function(age, money, portfolio)
-        # self.value_function.print_value_function()
+        self.value_function.print_value_function()
         self.policy.print_policy(
             portfolio_start=1,
             age_start=self.client.start_age,
@@ -78,6 +78,4 @@ class ValueFunctionCalculator:
 
     @staticmethod
     def round_values(number1, number2, number3, rounding):
-        return math.floor(number1), math.floor(number2), math.floor(number3)
-        # return round(number1, rounding), round(number2, rounding), round(number3, rounding)
-
+        return round(number1, rounding), round(number2, rounding), round(number3, 2)
