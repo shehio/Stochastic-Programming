@@ -15,6 +15,7 @@ class Client:
             self.contributions[self.start_age] += self.initial_balance
         else:
             self.contributions[self.start_age] = self.initial_balance
+        self.contributions[self.retirement_age] = 0
         return
 
     def get_contribution(self, age):
