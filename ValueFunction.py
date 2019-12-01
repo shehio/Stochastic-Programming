@@ -35,8 +35,6 @@ class ValueFunction:
     # Sorry for the arguments swap, Python doesn't allow overloads.
     def set_value_function(self, age, money, value, portfolio = None):
         self.sets = self.sets + 1
-#         if(money > self.money_upper_bound or money < self.money_lower_bound):
-#             print(f"Money is {money}")
         if (self.sets % 1000 == 0):
             print(f"Reached a {self.sets} sets.")
 
@@ -72,7 +70,6 @@ class ValueFunction:
                             = self.value_function[age][money]
                 else:
                     for portfolio in self.value_function[age][money].keys():
-                        # print(f"Age: {age}, money: {money}, portfolio: {portfolio}")
                         value_function_matrix[age - age_start][money - money_start][portfolio - portfolio_start]\
                             = self.value_function[age][money][portfolio]
 
