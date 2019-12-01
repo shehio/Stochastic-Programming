@@ -41,7 +41,7 @@ class PortfolioFactory:
         weights8 = [0.08, 0.06, 0.01, 0.02, 0.51, 0.02, 0.3]
         fees8 = 0.06
 
-        # Make this a loop.
+        # Move this into a loop.
         portfolios = [
             PortfolioFactory.create_portfolio(weights1, fees1),
             PortfolioFactory.create_portfolio(weights2, fees2),
@@ -63,3 +63,32 @@ class PortfolioFactory:
                 standard_deviations=PortfolioFactory.standard_deviations,
                 correlations=PortfolioFactory.cor,
                 fees=fees)
+
+
+    def test_single_sample(self):
+        portfolios = PortfolioFactory.get_available_portfolios()
+        count = len(portfolios)
+        for i in range(count):
+            print(f"Sampling from portfolio: {i + 1}, sample: {portfolios[i].sample_return()}")
+            i = i + 1
+
+    def test_portfolio_sampling(self):
+        portfolios = PortfolioFactory.get_available_portfolios()
+        count = len(portfolios)
+        samples = []
+        for j in range(count):
+            samples.append(0)
+        i = 0
+        for j in range(10000):
+            for portfolio in portfolios:
+                samples[i % count] = samples[i % count] + portfolio.sample_return()
+                i = i + 1
+
+        for sample in samples:
+            print(f"Sampling from portfolio: {i % count}, sample: {sample}")
+            i = i + 1
+
+
+# pf = PortfolioFactory()
+# pf.test_single_sample()
+# pf.test_portfolio_sampling()

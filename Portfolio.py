@@ -21,7 +21,8 @@ class Portfolio:
         return
 
     def sample_return(self):
-        multivariate_normal = nr.multivariate_normal(self.mu_log, self.covariance)
-        multivariate_log_normal = np.exp(multivariate_normal)
-        returns = round(np.dot(self.weights, multivariate_log_normal) * (1 - self.fees), 2)
+        multivariate_normal = nr.multivariate_normal(self.means, self.covariance)
+        multivariate_log_normal = np.exp(multivariate_normal) - 1  # He is saying there should be a -1 here.
+
+        returns = round(np.dot(self.weights, multivariate_log_normal) * (1 - self.fees), 3)
         return returns
