@@ -31,19 +31,14 @@ class Policy:
         monies_column = np.zeros((1, monies), dtype=np.int32)
         monies_column[0] = np.array(range(money_start, money_start + monies), dtype=np.int32)
 
-        # print(f"original monies, int/double: {monies_column}")
-
         portfolio_column = np.zeros((1, portfolios + 1), dtype=np.int32)
         portfolio_column[0] = np.array(range(portfolio_start - 1, portfolio_start + portfolios), dtype=np.int32)
-
-        # print(f"original portfolios, int/double: {portfolio_column}")
 
         for age in self.policy.keys():
             for money in self.policy[age].keys():
                 if money >= money_upper_bound or money <= money_lower_bound:
                     continue
                 for portfolio in self.policy[age][money].keys():
-                    # print(f"Age: {age}, money: {money}, portfolio: {portfolio}")
                     decision_matrix[age - age_start][money - money_start][portfolio - portfolio_start]\
                         = self.policy[age][money][portfolio]
 
