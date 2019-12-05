@@ -45,6 +45,7 @@ class Solution:
                 money = self.round_down(
                     (1 + chosen_portfolio.sample_return()) * money + self.client.get_contribution(age + 1))
                 age = age + 1
+                # print(f"Money: {money}, age: {age}, chosen portfolio: {chosen_portfolio_index}")
             wealth += money
         return wealth / simulation_number
 
@@ -56,7 +57,7 @@ class Solution:
 
 print(f"Starting the program...")
 start = time.time()
-solution = Solution(start_age=60, initial_balance=1600, step=10)
+solution = Solution(start_age=65, initial_balance=1600, step=10)
 end = time.time()
 
 print(f"Total execution time in minutes: {(end - start) / 60}")

@@ -13,7 +13,7 @@ class FinancialComponents:
     def get_shortfall_utility(actual_money, target_money):
 
         exponent = 0.7
-        gamma = 1 / 5  # in case of thousands, it should be 1 / 5000
+        gamma = 1 / 5000
         utility = 0
         if actual_money > target_money:
             utility = (actual_money ** exponent) / exponent
