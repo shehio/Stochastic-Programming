@@ -7,7 +7,7 @@ class PortfolioFactory:
     # The means, standard deviations, and correlation matrix are all in log terms.
     def __init__(self):
         PortfolioFactory.log_normal_means = np.array([0.06, 0.059, 0.07, 0.056, 0.019, 0.052, 0.015])
-        PortfolioFactory.log_normal_standard_deviations = np.array([[0.091, 0.202, 0.268, 0.207, 0.038, 0.07, 0.058]])
+        PortfolioFactory.log_normal_standard_deviations = np.array([[0.19, 0.202, 0.268, 0.207, 0.038, 0.07, 0.058]])
         PortfolioFactory.correlation_matrix = np.array([[1.000, 0.740, 0.670, 0.740, 0.130, 0.470, 0.020],
                                                         [0.740, 1.000, 0.700, 0.780, 0.090, 0.460, 0.000],
                                                         [0.670, 0.700, 1.000, 0.660, 0.070, 0.450, -0.03],
@@ -20,6 +20,7 @@ class PortfolioFactory:
         standard_deviations_matrix = np.matmul(
             PortfolioFactory.log_normal_standard_deviations.T,
             PortfolioFactory.log_normal_standard_deviations)
+
         PortfolioFactory.log_normal_covariance_matrix = np.multiply(
             PortfolioFactory.correlation_matrix,
             standard_deviations_matrix)
@@ -100,7 +101,7 @@ class PortfolioFactory:
     def transform_lognormal_covariance_entry_to_normal(row, col):
         mat = PortfolioFactory.log_normal_covariance_matrix
         log_means = PortfolioFactory.log_normal_means
-        return np.sqrt(np.log(1 + ((mat[row][col] ** 2) / ((1 + log_means[row]) * (1 + log_means[col])))))
+        return (np.log(1 + ((mat[row][col]) / ((1 + log_means[row]) * (1 + log_means[col])))))
 
     @staticmethod
     def test_lognormal_to_normal_transformations():
@@ -128,18 +129,21 @@ class PortfolioFactory:
         for j in range(count):
             samples.append(0)
         i = 0
-        for j in range(10000):
+        simulation_number = 15000
+        for j in range(simulation_number):
             for portfolio in portfolios:
                 samples[i % count] = samples[i % count] + portfolio.sample_return()
                 i = i + 1
-
+        print(f"For {simulation_number} number of samples:")
         for sample in samples:
-            print(f"Sampling from portfolio: {i % count}, sample: {sample}")
+            print(f"Sampling from portfolio: {i % count}, returns: {sample / simulation_number}")
             i = i + 1
 
 
+# Test code because I'm too lazy to create a test structure for the project.
 # pf = PortfolioFactory()
 # pf.test_lognormal_to_normal_transformations()
 # pf.test_single_sample()
+# print()
 # pf.test_portfolio_sampling()
 

@@ -52,8 +52,9 @@ class ValueFunctionCalculator:
         return
 
     def get_or_compute_value_function(self, age, money, portfolio):
-        money = self.round_down(money)  # Huge optimization
+        money = self.financial_components.round_down(money, self.money_lower_bound, self.money_upper_bound, self.step)  # Huge optimization
         value = self.value_function.get_value_function(age, money, portfolio)
+
         if value == 0:
             val_prev_portfolio, val_same_portfolio, val_next_portfolio = self.simulate_value_function(
                 age, money, portfolio, self.client.get_contribution(age))
@@ -93,11 +94,3 @@ class ValueFunctionCalculator:
     @staticmethod
     def round_values(number1, number2, number3, rounding):
         return round(number1, rounding), round(number2, rounding), round(number3, rounding)
-
-    def round_up(self, money):
-        return int(math.ceil(money / float(self.step))) * self.step
-
-    def round_down(self, money):
-        if money <= 0:
-            return 0
-        return int(math.ceil(money / float(self.step))) * self.step - self.step

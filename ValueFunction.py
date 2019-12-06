@@ -6,8 +6,6 @@ import PortfolioFactory
 
 RetirementAge = 67
 TargetMoney = 2079 # remove from here
-MaxBound = 1000000
-MinBound = -1000000
 
 class ValueFunction:
 

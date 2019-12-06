@@ -28,3 +28,18 @@ class FinancialComponents:
         utility = utility + decimal
 
         return utility
+
+    @staticmethod
+    def round_down(money, money_lower_bound, money_upper_bound, step):
+        if money <= money_lower_bound:
+            return money_lower_bound
+        if money >= money_upper_bound:
+            return money_upper_bound
+        return int(math.ceil(money / float(step))) * step - step
+
+    @staticmethod
+    def check_money(money, money_lower_bound, money_upper_bound):
+        if money < money_lower_bound:
+            raise Exception(f"The value of money shouldn't be less than the lower bound: {money}")
+        if money > money_upper_bound:
+            raise Exception(f"The value of money shouldn't be greater than the upper bound: {money}")

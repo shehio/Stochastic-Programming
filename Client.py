@@ -2,7 +2,8 @@ class Client:
 
     contributions = {}
 
-    def __init__(self, start_age, retirement_age, initial_balance):
+    def __init__(self, name, start_age, retirement_age, initial_balance):
+        self.name = name
         self.start_age = start_age
         self.retirement_age = retirement_age
         self.initial_balance = initial_balance
