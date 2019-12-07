@@ -13,6 +13,7 @@ class ValueFunction:
         self.money_lower_bound = money_lower_bound
         self.money_upper_bound = money_upper_bound
         self.value_function = {}
+        self.client_helper_map = {}
         factory = PortfolioFactory.PortfolioFactory()
         self.portfolios = factory.get_available_portfolios()
         self.financial_components = FinancialComponents.FinancialComponents()
@@ -29,6 +30,22 @@ class ValueFunction:
         elif age not in self.value_function.keys() or money not in self.value_function[age].keys() or portfolio not in self.value_function[age][money]:
             self.set_value_function(age, money, 0, portfolio)
         return self.value_function[age][money][portfolio]
+
+    def set_client_helper(self, age, money, value, portfolio = None):
+        if age not in self.client_helper_map.keys():
+            self.client_helper_map[age] = {}
+        if (portfolio is None):
+            self.client_helper_map[age][money] = value
+
+        else:
+            if money not in self.client_helper_map[age].keys():
+                self.client_helper_map[age][money] = {}
+            self.client_helper_map[age][money][portfolio] = value
+        return
+
+    # This should only be invoked when the value function has a value, otherwise it will throw a key error.
+    def get_client_helper(self, age, money, portfolio):
+        return self.client_helper_map[age][money][portfolio]
 
     # Sorry for the arguments swap, Python doesn't allow overloads.
     def set_value_function(self, age, money, value, portfolio = None):

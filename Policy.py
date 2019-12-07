@@ -23,6 +23,9 @@ class Policy:
         self.policy[age][money][portfolio] = value
         return
 
+    def get_policy(self, age, money, portfolio):
+        return self.policy[age][money][portfolio]
+
     def print_policy(self, portfolio_start, age_start, money_start, portfolios, ages, monies, money_lower_bound, money_upper_bound):
         decision_matrix = np.zeros((ages, monies, portfolios), dtype=np.int32) - 1
         annotated_decision_matrix = np.zeros((ages, monies + 1, portfolios + 1), dtype=np.int32) - 1
