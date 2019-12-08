@@ -25,9 +25,10 @@ class ValueFunctionCalculator:
 
     def populate_value_function(self, client):  # The name is incorrect. It does more than it claims.
         client_helper_list = list()
-        age = client.start_age + 1
+
         start = time.time()
-        initial_money = client.get_contribution(client.start_age)
+        initial_money = client.initial_balance + client.get_contribution(client.start_age)
+        age = client.start_age
         for portfolio in range(1, len(self.portfolios) + 1):
             client_helper_list.append(self.get_or_compute_value_function(age, initial_money, portfolio, client))
         end = time.time()
@@ -108,7 +109,6 @@ class ValueFunctionCalculator:
 
         # Set the client helper.
         max_value_ref = self.get_or_compute_value_function(age + 1, monies_average, chosen_portfolio, client)
-        # print(f"Setting a client helper: age: {age}, money: {money}, monies_average: {monies_average}, max_value: {max_value}")
         client_helper = ClientHelper.ClientHelper(age, money, chosen_portfolio, max_value, max_value_ref)
 
         # cache it

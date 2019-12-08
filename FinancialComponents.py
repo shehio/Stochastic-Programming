@@ -35,7 +35,7 @@ class FinancialComponents:
             return money_lower_bound
         if money >= money_upper_bound:
             return money_upper_bound
-        return int(math.ceil(money / float(step))) * step - step
+        return int(math.ceil((money + 0.01) / float(step))) * step - step
 
     @staticmethod
     def check_money(money, money_lower_bound, money_upper_bound):
