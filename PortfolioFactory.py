@@ -85,17 +85,20 @@ class PortfolioFactory:
         cols = PortfolioFactory.log_normal_covariance_matrix.shape[1]
 
         PortfolioFactory.normal_covariance_matrix = np.zeros((rows, cols))
-        ones = np.ones((1, rows))
         log_means = PortfolioFactory.log_normal_means
-        log_std = PortfolioFactory.log_normal_standard_deviations
-
-        normal_means = np.log(ones + log_means) - np.multiply(log_std, log_std) / (2 * ones)
-        PortfolioFactory.normal_means = [round(element, 3) for element in normal_means[0]]
 
         for i in range(0, rows):
             for j in range(0, cols):
                 PortfolioFactory.normal_covariance_matrix[i][j] =\
                     round(PortfolioFactory.transform_lognormal_covariance_entry_to_normal(i, j), 5)  # Is 5 okay?
+
+        # Moment matching: mu = ln(1 + m) - sigma_N^2 / 2, where sigma_N^2 is the
+        # normal-space variance (the diagonal of the normal covariance matrix),
+        # not the arithmetic variance s^2. Using s^2 here biases the implied
+        # arithmetic means low (e.g. asset 3 samples ~6.4% instead of 7%).
+        normal_variances = np.diag(PortfolioFactory.normal_covariance_matrix)
+        normal_means = np.log(1 + log_means) - normal_variances / 2
+        PortfolioFactory.normal_means = [round(element, 3) for element in normal_means]
 
     @staticmethod
     def transform_lognormal_covariance_entry_to_normal(row, col):
