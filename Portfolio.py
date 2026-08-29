@@ -23,5 +23,6 @@ class Portfolio:
         multivariate_normal = nr.multivariate_normal(self.means, self.covariance_matrix)
         multivariate_log_normal = np.exp(multivariate_normal) - 1
 
-        returns = round(np.dot(self.weights, multivariate_log_normal) * (1 - self.fees), 3)
+        # The management fee is charged on assets, so it comes off the return level.
+        returns = round(np.dot(self.weights, multivariate_log_normal) - self.fees, 3)
         return returns
