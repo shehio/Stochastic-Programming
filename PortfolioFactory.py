@@ -33,29 +33,31 @@ class PortfolioFactory:
 
     @staticmethod
     def get_available_portfolios():
+        # Fees are annual management fees as a fraction of assets: 0.20% for the
+        # most aggressive portfolio down to 0.06% for the most conservative one.
         weights1 = [0.3, 0.3, 0.1, 0.1, 0.1, 0.1, 0]
-        fees1 = 0.2
+        fees1 = 0.0020
 
         weights2 = [0.25, 0.25, 0.1, 0.1, 0.2, 0.1, 0]
-        fees2 = 0.18
+        fees2 = 0.0018
 
         weights3 = [0.25, 0.21, 0.08, 0.08, 0.3, 0.08, 0]
-        fees3 = 0.16
+        fees3 = 0.0016
 
         weights4 = [0.23, 0.19, 0.06, 0.06, 0.4, 0.06, 0]
-        fees4 = 0.14
+        fees4 = 0.0014
 
         weights5 = [0.21, 0.15, 0.04, 0.05, 0.45, 0.05, 0.05]
-        fees5 = 0.12
+        fees5 = 0.0012
 
         weights6 = [0.16, 0.12, 0.04, 0.04, 0.5, 0.04, 0.1]
-        fees6 = 0.1
+        fees6 = 0.0010
 
         weights7 = [0.13, 0.09, 0.02, 0.03, 0.55, 0.03, 0.15]
-        fees7 = 0.08
+        fees7 = 0.0008
 
         weights8 = [0.08, 0.06, 0.01, 0.02, 0.51, 0.02, 0.3]
-        fees8 = 0.06
+        fees8 = 0.0006
 
         # Move this into a loop.
         portfolios = [

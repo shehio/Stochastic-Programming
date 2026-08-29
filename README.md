@@ -29,6 +29,12 @@ python Main.py
 
 Clients, wealth bounds, bucket `step`, and `simulation_number` are configured at the bottom of `Main.py`. Runtime grows with the number of wealth buckets and simulations; the defaults take a few minutes.
 
+The fee model has a regression test, which needs no test runner:
+
+```bash
+python tests/test_portfolio_fees.py
+```
+
 ## Code map
 
 | File | Purpose |
@@ -42,3 +48,4 @@ Clients, wealth bounds, bucket `step`, and `simulation_number` are configured at
 | `Policy.py` | Stores and prints the optimal decision per state. |
 | `FinancialComponents.py` | Shortfall utility and wealth-bucket rounding. |
 | `ClientHelper.py` | Linked-list node for printing a client's trajectory. |
+| `tests/test_portfolio_fees.py` | Regression tests for the management fee model. |
